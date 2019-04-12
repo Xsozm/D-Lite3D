@@ -16,6 +16,8 @@ public class CellSpace {
 	private double kM = 0.0;
 	private Cell startCell;
 	private Cell goalCell;
+	final int MAX_HEIGH = 15;
+	final int MIN_HEIGH = 0;
 
 	/**
 	 * Returns an empty CellSpace
@@ -256,94 +258,126 @@ public class CellSpace {
 	public LinkedList<Cell> getSuccessors(Cell state) {
 		LinkedList<Cell> successors = new LinkedList<Cell>();
 		Cell tempState;
-		
-		
+
 		tempState = makeNewCell(state.getX() + 1, state.getY(), state.getZ(), new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			if (valid(tempState))
+				successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX(), state.getY() + 1, state.getZ(), new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() - 1, state.getY(), state.getZ(), new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX(), state.getY() - 1, state.getZ(), new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX(), state.getY(), state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX(), state.getY(), state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
-		
-		tempState = makeNewCell(state.getX() , state.getY() + 1 , state.getZ() - 1 , new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
+
+		tempState = makeNewCell(state.getX(), state.getY() + 1, state.getZ() - 1, new Costs(-1.0, -1.0));
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() + 1, state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY(), state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() - 1, state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX(), state.getY() - 1, state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() - 1, state.getY() - 1, state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
-		
+		if (valid(tempState))
+			successors.addFirst(tempState);
+
 		tempState = makeNewCell(state.getX() - 1, state.getY(), state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() - 1, state.getY() + 1, state.getZ() - 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() + 1, state.getZ(), new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
-		tempState = makeNewCell(state.getX() + 1 , state.getY() - 1, state.getZ(), new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
-		
-		tempState = makeNewCell(state.getX() - 1 , state.getY() - 1, state.getZ() , new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		tempState = makeNewCell(state.getX() + 1, state.getY() - 1, state.getZ(), new Costs(-1.0, -1.0));
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
-		tempState = makeNewCell(state.getX() - 1, state.getY() + 1 , state.getZ() , new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		tempState = makeNewCell(state.getX() - 1, state.getY() - 1, state.getZ(), new Costs(-1.0, -1.0));
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
-		tempState = makeNewCell(state.getX() , state.getY() + 1 , state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		tempState = makeNewCell(state.getX() - 1, state.getY() + 1, state.getZ(), new Costs(-1.0, -1.0));
+		if (valid(tempState))
+			successors.addFirst(tempState);
+
+		tempState = makeNewCell(state.getX(), state.getY() + 1, state.getZ() + 1, new Costs(-1.0, -1.0));
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() + 1, state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY(), state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() - 1, state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
-		
+		if (valid(tempState))
+			successors.addFirst(tempState);
+
 		tempState = makeNewCell(state.getX(), state.getY() - 1, state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
-		
+		if (valid(tempState))
+			successors.addFirst(tempState);
+
 		tempState = makeNewCell(state.getX() - 1, state.getY() - 1, state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
-		
+		if (valid(tempState))
+			successors.addFirst(tempState);
+
 		tempState = makeNewCell(state.getX() - 1, state.getY(), state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() - 1, state.getY() + 1, state.getZ() + 1, new Costs(-1.0, -1.0));
-		successors.addFirst(tempState);
+		if (valid(tempState))
+			successors.addFirst(tempState);
 
-		
 		return successors;
+	}
+
+	private boolean valid(Cell tempState) {
+		int z = tempState.getZ();
+		if (z >= MIN_HEIGH && z <= MAX_HEIGH)
+			return true;
+		return false;
 	}
 
 	public LinkedList<Cell> getPredecessors(Cell state) {
 		LinkedList<Cell> predecessors = new LinkedList<Cell>();
 		Cell tempState;
-		
+
 		tempState = makeNewCell(state.getX() + 1, state.getY(), state.getZ(), new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
@@ -361,8 +395,8 @@ public class CellSpace {
 
 		tempState = makeNewCell(state.getX(), state.getY(), state.getZ() - 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
-	
-		tempState = makeNewCell(state.getX() , state.getY() + 1 , state.getZ() - 1 , new Costs(-1.0, -1.0));
+
+		tempState = makeNewCell(state.getX(), state.getY() + 1, state.getZ() - 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() + 1, state.getZ() - 1, new Costs(-1.0, -1.0));
@@ -379,7 +413,7 @@ public class CellSpace {
 
 		tempState = makeNewCell(state.getX() - 1, state.getY() - 1, state.getZ() - 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
-		
+
 		tempState = makeNewCell(state.getX() - 1, state.getY(), state.getZ() - 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
@@ -389,16 +423,16 @@ public class CellSpace {
 		tempState = makeNewCell(state.getX() + 1, state.getY() + 1, state.getZ(), new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
-		tempState = makeNewCell(state.getX() + 1 , state.getY() - 1, state.getZ(), new Costs(-1.0, -1.0));
-		predecessors.addFirst(tempState);
-		
-		tempState = makeNewCell(state.getX() - 1 , state.getY() - 1, state.getZ() , new Costs(-1.0, -1.0));
+		tempState = makeNewCell(state.getX() + 1, state.getY() - 1, state.getZ(), new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
-		tempState = makeNewCell(state.getX() - 1, state.getY() + 1 , state.getZ() , new Costs(-1.0, -1.0));
+		tempState = makeNewCell(state.getX() - 1, state.getY() - 1, state.getZ(), new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
-		tempState = makeNewCell(state.getX() , state.getY() + 1 , state.getZ() + 1, new Costs(-1.0, -1.0));
+		tempState = makeNewCell(state.getX() - 1, state.getY() + 1, state.getZ(), new Costs(-1.0, -1.0));
+		predecessors.addFirst(tempState);
+
+		tempState = makeNewCell(state.getX(), state.getY() + 1, state.getZ() + 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() + 1, state.getZ() + 1, new Costs(-1.0, -1.0));
@@ -409,19 +443,18 @@ public class CellSpace {
 
 		tempState = makeNewCell(state.getX() + 1, state.getY() - 1, state.getZ() + 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
-		
+
 		tempState = makeNewCell(state.getX(), state.getY() - 1, state.getZ() + 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
-		
+
 		tempState = makeNewCell(state.getX() - 1, state.getY() - 1, state.getZ() + 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
-		
+
 		tempState = makeNewCell(state.getX() - 1, state.getY(), state.getZ() + 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
 
 		tempState = makeNewCell(state.getX() - 1, state.getY() + 1, state.getZ() + 1, new Costs(-1.0, -1.0));
 		predecessors.addFirst(tempState);
-
 
 		return predecessors;
 	}
