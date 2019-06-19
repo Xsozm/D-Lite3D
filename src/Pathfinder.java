@@ -21,6 +21,8 @@ public class Pathfinder {
 	private int fuel;
 	private int initial_fuel_amount;
 	public static HashMap<Triple, Boolean> busy = new HashMap<Triple, Boolean>();
+	public static HashMap<Triple, Boolean> busylanding = new HashMap<Triple, Boolean>();
+
 	public static double FUEL_FOR_BEING_IN_SAME_POSITION = 0.1;
 	private long car_id;
 	public static volatile int total_cars_arrived = 0;
@@ -73,24 +75,26 @@ public class Pathfinder {
 			return path;
 		}
 		boolean isTrapped = false;
-		long expected = Math.abs(space.getGoalCell().getX() - space.getStartCell().getX())
-				+ Math.abs(space.getGoalCell().getY() - space.getStartCell().getY())
-				+ Math.abs(space.getGoalCell().getZ() - space.getStartCell().getZ());
-		int k = 0;
-		while (!currentCell.equals(space.getGoalCell()) ) {
 
-			if (fuel <= Geometry.euclideanDistance(currentCell, space.getGoalCell()) * LITER_PER_KILO * 10 + 5) {
-				mode = 1; // change the mode
-				System.out.println("Car [" + car_id + "]" + "  Urgent Landing mode is activated .....");
-				this.blockManager.space.setGoalCell(currentCell.getX(), currentCell.getY(), 0);
-				
-				//total_cars_arrived++;
-				//return null;
+		int k = 0;
+		while (!currentCell.equals(space.getGoalCell())) {
+
+			if (fuel < 0) {
+				System.out.println(currentCell.getX() + " " + currentCell.getY() + " " + currentCell.getZ());
+
+				System.out.println("The Plane ran out of Fuel and Crashed !!");
+				return null;
 			}
-			
-			if(fuel<0) {
-				System.out.println("crash");
-				return null ;
+
+			if (mode == 0 && fuel <= Geometry.euclideanDistance(currentCell, space.getGoalCell()) * LITER_PER_KILO
+					* SCALE_FACTOR + 5) {
+				mode = 1; // change the mode
+
+				System.out.println("Car [" + car_id + "]" + "  Urgent Landing mode is activated .....");
+				int z = currentCell.getZ();
+				this.blockManager.space.setGoalCell(currentCell.getX() + z, currentCell.getY(), 0);
+				// return null;
+
 			}
 
 			isTrapped = true;
@@ -98,10 +102,19 @@ public class Pathfinder {
 
 			System.out.println("Car [" + car_id + "] is in..." + currentCell);
 			Triple tuple = new Triple(currentCell.getX(), currentCell.getY(), currentCell.getZ());
-			busy.put(tuple, true);
-			Thread.sleep(100);// take some time in the position
-			time_taken += 100;
-			busy.put(tuple, false);
+			if (mode == 1) {
+				// landing
+				busylanding.put(tuple, true);
+				Thread.sleep(10);// take some time in the position
+				time_taken += 10;
+				busylanding.put(tuple, false);
+			} else {
+				// going to the target
+				busy.put(tuple, true);
+				Thread.sleep(100);// take some time in the position
+				time_taken += 100;
+				busy.put(tuple, false);
+			}
 
 			potentialNextCells = space.getSuccessors(currentCell);
 			if (potentialNextCells.isEmpty()) {
@@ -112,12 +125,23 @@ public class Pathfinder {
 			Cell minimumCell = new Cell();
 
 			for (Cell potentialNextCell : potentialNextCells) {
+
 				Triple currentTuple = new Triple(potentialNextCell.getX(), potentialNextCell.getY(),
 						potentialNextCell.getZ());
-				if (blockManager.isBlocked(potentialNextCell)
-						|| ((busy.containsKey(currentTuple)) == true) && busy.get(currentTuple) == true) {
-					continue;
+
+				if (mode == 0) {
+					if (blockManager.isBlocked(potentialNextCell)
+							|| ((busy.containsKey(currentTuple)) == true) && busy.get(currentTuple) == true) {
+						continue;
+					}
+					if (((busylanding.containsKey(currentTuple)) == true) && busylanding.get(currentTuple) == true) {
+						continue;
+					}
+
 				} else {
+					if (((busylanding.containsKey(currentTuple)) == true) && busylanding.get(currentTuple) == true) {
+						continue;
+					}
 					isTrapped = false;
 				}
 
@@ -138,28 +162,35 @@ public class Pathfinder {
 				}
 			}
 
-
 			// scale the distance
 			double distance = 0;
 			if (!isTrapped) {
 				potentialNextCells.clear();
 				previous = currentCell;
 				currentCell = new Cell(minimumCell);
-				distance = Geometry.euclideanDistance(currentCell, previous)*SCALE_FACTOR;
+				distance = Geometry.euclideanDistance(currentCell, previous) * SCALE_FACTOR;
 				fuel -= distance * LITER_PER_KILO;
 				System.out.println("Car [" + car_id + "] moving to..." + currentCell);
-			}else {
+			} else {
 				fuel -= FUEL_FOR_BEING_IN_SAME_POSITION;
 				System.out.println("Car [" + car_id + "] still in..." + currentCell);
 
 			}
 
-			
 			total_distance += distance;
 
 			// time for moving
 			Thread.sleep((long) (distance));
 			time_taken += ((distance) / 60) * 3600L;
+
+			if (mode == 1) {
+				// landing mode
+				if (currentCell.getZ() <= 1) {
+					total_cars_arrived++;
+					System.out.println("Car [" + car_id + "] Trip Landed Successfully ");
+					return path;
+				}
+			}
 
 		}
 
@@ -175,9 +206,7 @@ public class Pathfinder {
 					+ "% of fuel ran out" + " and distance" + " " + total_distance + ", Time Taken " + time_taken + " s"
 					+ "should make distance " + this.ideal_distance + " should have taken about " + ideal_time);
 		} else {
-
 			System.out.println("Car [" + car_id + "] TRip Failed couldn't reach goal.");
-
 		}
 
 		return path;

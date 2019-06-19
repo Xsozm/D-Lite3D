@@ -7,9 +7,9 @@ import java.util.HashMap;
 
 public class Main {
 	public static void main(String[] args) throws InterruptedException, IOException {
-//	    BufferedWriter writer = new BufferedWriter(new FileWriter("TestFile5", true));
+	    //BufferedWriter writer = new BufferedWriter(new FileWriter("TestFile5", true));
 		int total_cars = 0 ;
-		Scanner sc = new Scanner("TestFile2");
+		Scanner sc = new Scanner("TestFile1");
 
 		// fuel range 30-60
 		// speed 60KM/H
@@ -22,6 +22,8 @@ public class Main {
 			int xx = sc.nextInt();
 			int yy = sc.nextInt();
 			int zz = sc.nextInt();
+
+
 
 			// random from 30-60
 			int fuel = sc.nextInt();
